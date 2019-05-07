@@ -27,9 +27,13 @@ public class Main {
 		BufferedWriter writer = new BufferedWriter(new FileWriter(newpath));
 		String temp = "";
 		String var = "";
+		writer.write("const config = {");
+		writer.newLine();
 		while(reader.ready()) {
 			currentLine = reader.readLine();
 			if(currentLine.equals("function move()")) {	//Gere le const move
+				writer.write("}");
+				writer.newLine();
 				writer.write("const move = ["); 
 				writer.newLine(); 
 			}
@@ -37,7 +41,7 @@ public class Main {
 				writer.write("const bank = [");
 				writer.newLine();
 			}
-			else if (currentLine.equals("function phenix()")) {
+			else if (currentLine.equals("function phenix()")) { //Gere le phenix
 				writer.write("const phenix = [");
 				writer.newLine();
 			}
@@ -46,7 +50,20 @@ public class Main {
 				writer.newLine();
 			}
 			else if(currentLine.length() == 0) {} //Gere ligne vide
-			else if(currentLine.contains("{") && !currentLine.contains("return")){ //Gere les moves normaux
+			else if(currentLine.contains("=") && !currentLine.contains("{")){
+				for(int i = 0; i<currentLine.length(); i++) {
+					if(currentLine.charAt(i) == '=') {
+						temp += ":";
+					} else {
+						temp += currentLine.charAt(i);
+					}
+				}
+				temp += ",";
+				writer.write(temp);
+				writer.newLine();
+				temp = "";
+			}
+			else if(currentLine.contains("{") && !currentLine.contains("return") || currentLine.contains("=") && !currentLine.contains("{")){ //Gere les moves normaux
 				for(int i = 0; i < currentLine.length(); i++) {
 					if(currentLine.charAt(i) == '=') {
 						temp += ":";
