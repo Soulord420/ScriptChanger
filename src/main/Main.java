@@ -26,22 +26,32 @@ public class Main {
 		newpath += "\\SBSCRIPT.txt";
 		BufferedWriter writer = new BufferedWriter(new FileWriter(newpath));
 		String temp = "";
-		String var = "";
+		boolean finConfig = false;
 		writer.write("const config = {");
 		writer.newLine();
 		while(reader.ready()) {
 			currentLine = reader.readLine();
 			if(currentLine.equals("function move()")) {	//Gere le const move
+				if(!finConfig) {
 				writer.write("}");
 				writer.newLine();
+				}
 				writer.write("const move = ["); 
 				writer.newLine(); 
 			}
 			else if(currentLine.equals("function bank()")) { //Gere la function bank
+				if(!finConfig) {
+					writer.write("}");
+					writer.newLine();
+					}
 				writer.write("const bank = [");
 				writer.newLine();
 			}
 			else if (currentLine.equals("function phenix()")) { //Gere le phenix
+				if(!finConfig) {
+					writer.write("}");
+					writer.newLine();
+					}
 				writer.write("const phenix = [");
 				writer.newLine();
 			}
@@ -50,7 +60,20 @@ public class Main {
 				writer.newLine();
 			}
 			else if(currentLine.length() == 0) {} //Gere ligne vide
-			else if(currentLine.contains("=") && !currentLine.contains("{")){
+			else if(currentLine.contains("function")){ //Gere les customs
+				if(!finConfig) {
+					writer.write("}");
+					writer.newLine();
+					}
+				writer.write(currentLine);
+				writer.newLine();
+				while(!currentLine.contains("end")) {
+					custom(currentLine, writer);
+					writer.newLine();
+					currentLine = reader.readLine();
+				}
+			}
+			else if(currentLine.contains("=") && !currentLine.contains("{")){ 
 				for(int i = 0; i<currentLine.length(); i++) {
 					if(currentLine.charAt(i) == '=') {
 						temp += ":";
@@ -77,5 +100,9 @@ public class Main {
 			}
 		}
 		writer.close();
+	}
+	
+	public static void custom(String currentLine, BufferedWriter writer) {
+		
 	}
 }
